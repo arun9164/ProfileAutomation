@@ -1,9 +1,8 @@
-
 import { test, expect } from '@playwright/test';
 
 test('Servicenow Developer Profile and Testing Profile', async ({ browser }) => {
 
-    test.setTimeout(60000);
+    test.setTimeout(180000); // CHANGED: 60000 -> 180000 (two full flows need more time)
 
     // ========== FIRST PROFILE: SERVICENOW DEVELOPER ==========
 
@@ -11,7 +10,7 @@ test('Servicenow Developer Profile and Testing Profile', async ({ browser }) => 
     const page = await context1.newPage();
 
     try {
-        await page.goto('https://www.naukri.com/');
+        await page.goto('https://www.naukri.com/', { waitUntil: 'domcontentloaded' }); // CHANGED
 
         await page.locator("//a[@id='login_Layer']").click();
 
@@ -53,10 +52,12 @@ test('Servicenow Developer Profile and Testing Profile', async ({ browser }) => 
         console.log("ServiceNow Developer Profile flow completed");
 
     } catch (error) {
-        await page.screenshot({
-            path: 'servicenow-profile-error.png',
-            fullPage: true
-        });
+        if (!page.isClosed()) { // CHANGED: avoid screenshot on a closed page
+            await page.screenshot({
+                path: 'servicenow-profile-error.png',
+                fullPage: true
+            });
+        }
 
         console.log("ServiceNow profile flow failed");
         throw error;
@@ -72,7 +73,7 @@ test('Servicenow Developer Profile and Testing Profile', async ({ browser }) => 
     const page2 = await context2.newPage();
 
     try {
-        await page2.goto('https://www.naukri.com/');
+        await page2.goto('https://www.naukri.com/', { waitUntil: 'domcontentloaded' }); // CHANGED
 
         await page2.locator("//a[@id='login_Layer']").click();
 
@@ -114,10 +115,12 @@ test('Servicenow Developer Profile and Testing Profile', async ({ browser }) => 
         console.log("Testing Profile flow completed");
 
     } catch (error) {
-        await page2.screenshot({
-            path: 'testing-profile-error.png',
-            fullPage: true
-        });
+        if (!page2.isClosed()) { // CHANGED: avoid screenshot on a closed page
+            await page2.screenshot({
+                path: 'testing-profile-error.png',
+                fullPage: true
+            });
+        }
 
         console.log("Testing profile flow failed");
         throw error;
@@ -127,4 +130,3 @@ test('Servicenow Developer Profile and Testing Profile', async ({ browser }) => 
     }
 
 });
-
