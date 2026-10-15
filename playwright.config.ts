@@ -13,7 +13,7 @@ export default defineConfig({
   reporter: 'list',
 
   use: {
-    headless: false,
+    headless: true,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
